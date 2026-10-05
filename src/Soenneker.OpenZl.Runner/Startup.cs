@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Soenneker.Utils.Process.Registrars;
+using Soenneker.Utils.Directory.Registrars;
+using Soenneker.Utils.File.Registrars;
 using Soenneker.OpenZl.Runner.Utils;
 using Soenneker.OpenZl.Runner.Utils.Abstract;
 using Soenneker.Managers.Runners.Registrars;
@@ -22,6 +24,8 @@ public static class Startup
     {
         services.AddHostedService<ConsoleHostedService>()
                 .AddSingleton<IFileOperationsUtil, FileOperationsUtil>()
+                .AddDirectoryUtilAsSingleton()
+                .AddFileUtilAsSingleton()
                 .AddProcessUtilAsSingleton()
                 .AddRunnersManagerAsSingleton();
 

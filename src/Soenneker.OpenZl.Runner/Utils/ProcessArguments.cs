@@ -8,6 +8,7 @@ namespace Soenneker.OpenZl.Runner.Utils;
 internal static class ProcessArguments
 {
     public static string Join(IEnumerable<string> arguments) => string.Join(" ", arguments.Select(Quote));
+
     private static string Quote(string value)
     {
         if (value.Contains('\0')) throw new ArgumentException("An argument contains a null character.");
