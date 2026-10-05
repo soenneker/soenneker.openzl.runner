@@ -12,7 +12,7 @@ internal static class ProcessArguments
     private static string Quote(string value)
     {
         if (value.Contains('\0')) throw new ArgumentException("An argument contains a null character.");
-        var b = new StringBuilder("\""); int slashes = 0;
+        var b = new StringBuilder("\""); var slashes = 0;
         foreach (char c in value)
         {
             if (c == '\\') { slashes++; continue; }

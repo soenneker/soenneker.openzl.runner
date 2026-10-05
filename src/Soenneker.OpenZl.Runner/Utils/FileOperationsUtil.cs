@@ -71,7 +71,7 @@ public sealed class FileOperationsUtil(
             return match.Groups[1].Value;
         }
 
-        string version = $"{Component("MAJOR")}.{Component("MINOR")}.{Component("PATCH")}";
+        var version = $"{Component("MAJOR")}.{Component("MINOR")}.{Component("PATCH")}";
         var configure = new List<string>
         {
             "-S", source, "-B", build, "-DCMAKE_BUILD_TYPE=Release", "-DOPENZL_BUILD_TESTS=OFF",

@@ -35,9 +35,8 @@ jobs:
           dotnet-version: 10.0.x
       - name: Configure MSVC SDK for clang-cl
         if: runner.os == 'Windows'
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
+        shell: pwsh
+        run: ./.github/scripts/configure-msvc.ps1
       - name: Build and verify native library
         run: dotnet run --project src/Soenneker.OpenZl.Runner -c Release -- --OpenZl:UpdateRepository=false
       - name: Verify staged native ABI
