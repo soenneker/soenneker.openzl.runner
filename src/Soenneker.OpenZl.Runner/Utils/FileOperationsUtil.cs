@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -25,7 +26,7 @@ public sealed class FileOperationsUtil(
     IFileUtil fileUtil,
     IConfiguration configuration,
     ILogger<FileOperationsUtil> logger,
-    IRunnersManager runnersManager) : IFileOperationsUtil
+    IRunnersManager? runnersManager = null) : IFileOperationsUtil
 {
     public async ValueTask Process(CancellationToken cancellationToken = default)
     {
@@ -118,7 +119,7 @@ public sealed class FileOperationsUtil(
             Path.GetFullPath(configuration["OpenZl:OutputDirectory"] ?? Path.Combine(work, "stage", rid, "native"));
         await directoryUtil.Create(stage, cancellationToken: cancellationToken);
         await fileUtil.Copy(executable, Path.Combine(stage, executableName), cancellationToken: cancellationToken);
-        if (!windows)
+        if (IsLinux())
             File.SetUnixFileMode(Path.Combine(stage, executableName),
                 UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute | UnixFileMode.GroupRead |
                 UnixFileMode.GroupExecute | UnixFileMode.OtherRead | UnixFileMode.OtherExecute);
@@ -135,10 +136,18 @@ public sealed class FileOperationsUtil(
             cancellationToken: cancellationToken);
         logger.LogInformation("Built and verified OpenZL {Runtime} at {Stage}", rid, stage);
         if (configuration.GetValue<bool>("OpenZl:UpdateRepository"))
+        {
+            if (runnersManager is null)
+                throw new InvalidOperationException("Repository updates require RunnersManager registration.");
+
             await runnersManager.PushIfChangesNeededForDirectory(
                 Path.Combine(rid, "native"), stage, library,
                 $"https://github.com/soenneker/{library.ToLowerInvariantFast()}", false, cancellationToken, commit[..12]);
+        }
     }
+
+    [SupportedOSPlatformGuard("linux")]
+    private static bool IsLinux() => RuntimeUtil.IsLinux();
 
     private ValueTask<List<string>> Run(string executable, string working, IEnumerable<string> arguments,
         CancellationToken token) =>

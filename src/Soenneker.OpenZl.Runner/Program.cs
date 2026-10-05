@@ -61,7 +61,7 @@ public sealed class Program
                 builder.SetBasePath(hostingContext.HostingEnvironment.ContentRootPath);
             })
             .UseSerilog()
-            .ConfigureServices((_, services) => { Startup.ConfigureServices(services); });
+            .ConfigureServices((context, services) => { Startup.ConfigureServices(services, context.Configuration); });
 
         return host;
     }
