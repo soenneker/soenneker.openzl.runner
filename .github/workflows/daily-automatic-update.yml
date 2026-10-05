@@ -24,7 +24,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       ASPNETCORE_ENVIRONMENT: Production
-      OpenZl__WorkingDirectory: ${{ runner.temp }}/openzl
       OpenZl__OutputDirectory: ${{ github.workspace }}/stage
       OPENZL_NATIVE_LIBRARY: ${{ github.workspace }}/stage/${{ matrix.library }}
     steps:
@@ -40,6 +39,8 @@ jobs:
         with:
           arch: x64
       - name: Build and verify native library
+        env:
+          OpenZl__WorkingDirectory: ${{ runner.temp }}/openzl
         run: dotnet run --project src/Soenneker.OpenZl.Runner -c Release -- --OpenZl:UpdateRepository=false
       - name: Verify staged native ABI
         run: dotnet test --project test/Soenneker.OpenZl.Runner.Tests -c Release -- --treenode-filter "/*/*/OpenZlRunnerTests/*"
@@ -57,6 +58,7 @@ jobs:
           user: soenneker
       - name: Update platform package
         env:
+          OpenZl__WorkingDirectory: ${{ runner.temp }}/openzl
           GH__USERNAME: soenneker
           GH__TOKEN: ${{ secrets.GH__TOKEN }}
           GIT__TOKEN: ${{ secrets.GIT__TOKEN }}
