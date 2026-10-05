@@ -1,0 +1,48 @@
+name: build-and-test
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            rid: linux-x64
+            library: libopenzl.so
+          - os: windows-2022
+            rid: win-x64
+            library: openzl.dll
+    runs-on: ${{ matrix.os }}
+    env:
+      ASPNETCORE_ENVIRONMENT: Production
+      OpenZl__OutputDirectory: ${{ github.workspace }}/stage
+      OPENZL_NATIVE_LIBRARY: ${{ github.workspace }}/stage/${{ matrix.library }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - name: Configure MSVC SDK for clang-cl
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      - name: Build and verify native library
+        run: dotnet run --project src/Soenneker.OpenZl.Runner -c Release -- --OpenZl:UpdateRepository=false
+      - name: Verify staged native ABI
+        run: dotnet test --project test/Soenneker.OpenZl.Runner.Tests -c Release -- --treenode-filter "/*/*/OpenZlRunnerTests/*"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openzl-${{ matrix.rid }}
+          path: stage/
