@@ -6,13 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Soenneker.Managers.Runners.Abstract;
 using Soenneker.OpenZl.Runner.Utils.Abstract;
+using System.Threading;
 
 namespace Soenneker.OpenZl.Runner.Tests;
 
 public sealed class StartupTests
 {
     [Test]
-    public async Task BuildOnlyResolvesWithoutPublishingCredentials()
+    public async Task BuildOnlyResolvesWithoutPublishingCredentials(CancellationToken cancellationToken)
     {
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?> { ["OpenZl:UpdateRepository"] = "false" })
