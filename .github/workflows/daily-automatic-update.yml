@@ -51,7 +51,7 @@ jobs:
         shell: pwsh
         run: '"BUILD_VERSION=4.0.$env:GITHUB_RUN_NUMBER" >> $env:GITHUB_ENV'
       - name: Log in to NuGet
-        uses: soenneker/nuget-resilient-login@v3
+        uses: soenneker/nuget-resilient-login@v5
         id: nuget-login
         with:
           user: soenneker
