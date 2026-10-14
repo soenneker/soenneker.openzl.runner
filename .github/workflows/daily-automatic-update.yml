@@ -5,7 +5,6 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  id-token: write
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -50,11 +49,6 @@ jobs:
       - name: Set package version
         shell: pwsh
         run: '"BUILD_VERSION=4.0.$env:GITHUB_RUN_NUMBER" >> $env:GITHUB_ENV'
-      - name: Log in to NuGet
-        uses: soenneker/nuget-resilient-login@v7
-        id: nuget-login
-        with:
-          user: soenneker
       - name: Update platform package
         env:
           OpenZl__WorkingDirectory: ${{ runner.temp }}/openzl
@@ -63,5 +57,5 @@ jobs:
           GIT__TOKEN: ${{ secrets.GIT__TOKEN }}
           GIT__NAME: ${{ secrets.GIT__NAME }}
           GIT__EMAIL: ${{ secrets.GIT__EMAIL }}
-          NUGET__TOKEN: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+          NUGET__TOKEN: ${{ secrets.NUGET__TOKEN }}
         run: dotnet run --project src/Soenneker.OpenZl.Runner -c Release --no-build -- --OpenZl:UpdateRepository=true
