@@ -27,7 +27,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0-rc.3.26522.148" />
         <PackageReference Include="Soenneker.Managers.Runners" Version="11.0.2652" />
         <PackageReference Include="Soenneker.Utils.Directory" Version="11.0.970" />
-        <PackageReference Include="Soenneker.Utils.File" Version="11.0.2325" />
+        <PackageReference Include="Soenneker.Utils.File" Version="11.0.2326" />
         <PackageReference Include="Soenneker.Utils.Runtime" Version="11.0.1156" />
         <PackageReference Include="Soenneker.Utils.Process" Version="11.0.1602" />
     </ItemGroup>
