@@ -41,7 +41,7 @@ jobs:
         run: dotnet run --project src/Soenneker.OpenZl.Runner -c Release -- --OpenZl:UpdateRepository=false
       - name: Verify staged native ABI
         run: dotnet test --project test/Soenneker.OpenZl.Runner.Tests -c Release -- --treenode-filter "/*/*/OpenZlRunnerTests/*"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: openzl-${{ matrix.rid }}
           path: stage/
