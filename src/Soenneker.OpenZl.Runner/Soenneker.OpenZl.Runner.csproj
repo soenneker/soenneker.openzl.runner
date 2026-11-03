@@ -23,8 +23,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="11.0.1454" />
+        <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="11.0.1455" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0-rc.3.26522.148" />
-        <PackageReference Include="Soenneker.Managers.Runners" Version="11.0.2684" />
+        <PackageReference Include="Soenneker.Managers.Runners" Version="11.0.2689" />
     </ItemGroup>
 </Project>
