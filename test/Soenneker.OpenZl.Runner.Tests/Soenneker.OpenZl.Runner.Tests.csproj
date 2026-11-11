@@ -7,7 +7,7 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="TUnit" Version="1.81.10" />
+        <PackageReference Include="TUnit" Version="1.83.0" />
         <ProjectReference Include="..\..\src\Soenneker.OpenZl.Runner\Soenneker.OpenZl.Runner.csproj" />
     </ItemGroup>
 </Project>
